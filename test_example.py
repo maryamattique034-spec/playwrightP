@@ -28,6 +28,8 @@ def test_get_input(page: Page):
 
     page.get_by_label("Username").fill("tomsmith")
 
+    page.get_by_label('password').focus()
+    
     page.get_by_label("Password").fill("SuperSecretPassword!")
 
     page.get_by_role("button", name="Next").click()

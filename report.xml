@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+    <testsuite name="pytest" errors="0" failures="0" skipped="0" tests="3" time="16.464"
+        timestamp="2026-10-30T16:58:59.147771" hostname="Macbooks-MacBook-Pro-8.local">
+        <testcase classname="test_example" name="test_has_title[chromium]" time="3.328" />
+        <testcase classname="test_example" name="test_get_started_link[chromium]" time="6.723" />
+        <testcase classname="test_example" name="test_get_input[chromium]" time="6.377" />
+    </testsuite>
+</testsuites>
+
+<!-- shift + option + f   ->for formatting -->

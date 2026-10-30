@@ -1,0 +1,2 @@
+Captured text: We sent a 6-digit code to your phone. For this example it is shown here: 878478. It expires in 3 minutes.
+Login successful with the 6-digit code.
