@@ -34,7 +34,16 @@ def test_get_input(page: Page):
 
     expect(page.get_by_text("Enter Your Code")).to_be_visible()
 
+    page.get_by_label("One-time code").fill("86922")
+
+    page.get_by_role("button", name="Verify").click()
+
+    expect(page.get_by_text(" Your code is invalid!")).to_be_visible()
     
+    # expect(page.get_by_text("Secure Area")).to_be_visible()
+
+    # expect(page.get_by_text("Welcome! You logged in with a password and a one-time code.")).to_be_visible()
+
 
 
 
