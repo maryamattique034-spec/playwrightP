@@ -17,7 +17,7 @@ def test_get_started_link(page: Page):
 
     expect(page.get_by_text("How to install Playwright")).to_be_visible()
 
-
+# Test login with two-factor authentication
 def test_get_input(page: Page):
     page.goto("https://the-internet.herokuapp.com/two_factor")
 
@@ -65,6 +65,21 @@ def test_get_input(page: Page):
 
     else:
         print("No 6-digit code found in the message.")
+
+
+# Test hover and click
+def test_hover_and_click(page: Page):
+    page.goto("https://the-internet.herokuapp.com/hovers")
+
+    # Hover over the first figure
+    first_figure = page.locator(".figure").nth(0)
+    first_figure.hover()
+
+    # Click on the "View profile" link that appears after hovering
+    first_figure.get_by_role("link", name="View profile").click()
+
+    # Expect the new page to have a heading with the name of Not Found.
+    expect(page.get_by_role("heading", name="Not Found")).to_be_visible()
         
 
 
