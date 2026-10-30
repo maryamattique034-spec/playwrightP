@@ -80,6 +80,22 @@ def test_hover_and_click(page: Page):
 
     # Expect the new page to have a heading with the name of Not Found.
     expect(page.get_by_role("heading", name="Not Found")).to_be_visible()
+
+
+# Test file upload
+def test_file_upload(page: Page):
+    page.goto("https://the-internet.herokuapp.com/upload")
+
+    with page.expect_file_chooser() as fc_info:
+        file_id = page.locator('#file-upload').click()
+    #    file_id = page.locator('input[name="file"]').click()
+
+    file_chooser = fc_info.value
+    file_chooser.set_files("samplepdf.pdf")
+
+    page.get_by_role("button", name="Upload").click()
+
+    expect(page.get_by_text("File Uploaded!")).to_be_visible()
         
 
 
