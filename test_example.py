@@ -34,15 +34,36 @@ def test_get_input(page: Page):
 
     expect(page.get_by_text("Enter Your Code")).to_be_visible()
 
-    page.get_by_label("One-time code").fill("86922")
+    # now input the correct code and verify the login is successful
 
-    page.get_by_role("button", name="Verify").click()
+    # first we have to find the code from the current page fron text 
 
-    expect(page.get_by_text(" Your code is invalid!")).to_be_visible()
+    # Catch the subheader text containing the message
+    # Looking at your HTML, it's inside an h4 with class 'subheader'
+    subheader_element = page.locator("h4.subheader")
+
+    message_text = subheader_element.inner_text()
+
+    print(f"Captured text: {message_text}")
     
-    # expect(page.get_by_text("Secure Area")).to_be_visible()
+    # 2. Use a regex pattern to find the 6-digit code
+    # \b\d{6}\b searches for 6 consecutive digits bounded by word limits
+    match = re.search(r"\b\d{6}\b", message_text)
 
-    # expect(page.get_by_text("Welcome! You logged in with a password and a one-time code.")).to_be_visible()
+    if match:
+        page.get_by_label("One-time code").fill(match.group(0))
+        
+        page.get_by_role("button", name="Verify").click()
+
+        expect(page.get_by_text("Secure Area")).to_be_visible()
+         
+        expect(page.get_by_text("Welcome! You logged in with a password and a one-time code.")).to_be_visible()
+
+        print("Login successful with the 6-digit code.")
+
+    else:
+        print("No 6-digit code found in the message.")
+        
 
 
 
