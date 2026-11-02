@@ -96,10 +96,24 @@ def test_file_upload(page: Page):
     page.get_by_role("button", name="Upload").click()
 
     expect(page.get_by_text("File Uploaded!")).to_be_visible()
-        
 
 
 
+def test_navigations(page: Page):
+    page.goto("https://the-internet.herokuapp.com/")
+
+    # Click on the "A/B Testing" link
+    page.get_by_role("link", name="A/B Testing").click()
+
+
+    # Expect the new page to have a heading with the name of A/B Test Control
+    expect(page.get_by_role("heading", name="A/B Test Control")).to_be_visible()
+
+    # Navigate back to the previous page
+    page.go_back()
+
+    # Expect the original page to have a heading with the name of Welcome to the-internet
+    expect(page.get_by_role("heading", name="Welcome to the-internet")).to_be_visible()
 
 
 
