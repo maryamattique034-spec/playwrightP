@@ -145,6 +145,22 @@ def test_select_dropdown(page: Page):
 
 
 
+def test_select_drag_drop(page: Page):
+    # 1. Navigate to the page with the dropdown
+    page.goto("https://the-internet.herokuapp.com/drag_and_drop")
+
+    expect(page.get_by_role("heading", name="Drag and Drop")).to_be_visible()
+
+    source = page.locator("#column-a")
+    target = page.locator("#column-b")
+
+    # 3. Perform the drag and drop action
+    source.drag_to(target)
+
+    # 4. Verify the action was successful
+    # (In this specific example, Column A and Column B swap places)
+    expect(page.locator("#column-a header")).to_have_text("B")
+
 
 
 
