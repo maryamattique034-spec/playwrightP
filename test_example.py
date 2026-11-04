@@ -1,5 +1,7 @@
 import re
 from playwright.sync_api import Page, expect
+from pathlib import Path
+
 def test_has_title(page: Page):
     page.goto("https://playwright.dev/")
 
@@ -96,7 +98,53 @@ def test_file_upload(page: Page):
     page.get_by_role("button", name="Upload").click()
 
     expect(page.get_by_text("File Uploaded!")).to_be_visible()
-        
+
+
+def test_download_file(page: Page):
+    # 1. Navigate to the page with the download link/button
+    page.goto("https://the-internet.herokuapp.com/download")
+
+    # 2. Use a context manager to wait for the download event while clicking
+    with page.expect_download() as download_info:
+        # 3. Click the element that initiates the download
+        page.get_by_role("link", name="Images.txt").click()
+    # 4. Get the download object from the context manager
+    download = download_info.value
+
+    # Optional: Inspect the suggested filename
+    print(f"Suggested filename: {download.suggested_filename}")
+
+    # 5. Define the local directory and path to save the file
+    downloads_dir = Path(__file__).parent / "downloads"
+    downloads_dir.mkdir(exist_ok=True)
+    save_path = downloads_dir / download.suggested_filename
+
+    # 6. Save the downloaded file to your desired path
+    download.save_as(save_path)
+
+    # 7. Verify the file exists locally
+    assert save_path.exists()
+    print(f"File successfully saved to: {save_path}")
+
+
+def test_select_dropdown(page: Page):
+    # 1. Navigate to the page with the dropdown
+    page.goto("https://the-internet.herokuapp.com/dropdown")
+
+    expect(page.get_by_role("heading", name="Dropdown List")).to_be_visible()
+    # 2. Select an option by its visible text
+    page.locator("#dropdown").select_option("Option 2")
+
+    # Alternatively, you can select by value or index:
+    # page.locator("#country-select").select_option(value="ca")
+    # page.locator("#country-select").select_option(index=1)
+
+    # 3. Verify the selection was successful
+    selected_option = page.locator("#dropdown")
+    expect(selected_option).to_have_value("2") # Or verify the visible text
+
+
+
 
 
 
