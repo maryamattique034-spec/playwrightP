@@ -162,13 +162,43 @@ def test_select_drag_drop(page: Page):
     expect(page.locator("#column-a header")).to_have_text("B")
 
 
+def test_dynamic_loading(page: Page):
+    # 1. Navigate to the page with the dropdown
+    page.goto("https://the-internet.herokuapp.com/dynamic_loading/2")
+
+    expect(page.get_by_role("heading", name="Dynamically Loaded Page Elements")).to_be_visible()
+
+    page.get_by_role("button", name="Start").click()
+
+    expect(page.locator("#finish")).to_have_text("Hello World!", timeout=10000)
+    # page.locator("#finish").text_content()
 
 
 
+def test_dynamic_controls(page: Page):
+    # 1. Navigate to the page with the dropdown
+    page.goto("https://the-internet.herokuapp.com/dynamic_controls")
 
+    expect(page.locator("#checkbox")).to_have_count(1)
 
+    page.get_by_role("button", name="Remove").click()
 
+    expect(page.locator("#checkbox")).to_have_count(0)
 
+    expect(page.locator("#message")).to_have_text("It's gone!")
 
- 
-    
+    page.get_by_role("button", name="Add").click()
+
+    expect(page.locator("#message")).to_have_text("It's back!")
+
+    expect(page.get_by_role("textbox")).to_be_disabled()
+
+    page.get_by_role("button", name="Enable").click()
+
+    expect(page.locator("#message")).to_have_text("It's enabled!")
+
+    expect(page.get_by_role("textbox")).to_be_enabled()
+
+    page.get_by_role("textbox").fill("Maryam Attique")
+    expect(page.get_by_role("textbox")).to_have_value("Maryam Attique")
+
