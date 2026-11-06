@@ -200,5 +200,49 @@ def test_dynamic_controls(page: Page):
     expect(page.get_by_role("textbox")).to_be_enabled()
 
     page.get_by_role("textbox").fill("Maryam Attique")
+
     expect(page.get_by_role("textbox")).to_have_value("Maryam Attique")
+
+
+
+def test_entry_ad(page: Page):
+    page.goto("https://the-internet.herokuapp.com/entry_ad")
+
+    modal = page.locator("#modal")
+
+    # 1. Modal appears automatically (auto-wait via expect)
+    expect(modal).to_be_visible()
+    expect(modal.locator(".modal-title")).to_contain_text("This is a modal window")
+
+    # 2. Close it
+    modal.locator(".modal-footer").click()
+    expect(modal).to_be_hidden()
+
+    # 3. Reload: the cookie stops the ad from showing again
+    page.reload()
+    page.wait_for_timeout(2000)  # only for learning: gives the ad time to (not) appear
+    expect(modal).to_be_hidden()
+
+    # # 4. Re-enable the ad and reload: it shows again
+    # page.locator("#restart-ad").click()
+    # page.reload()
+    # expect(modal).to_be_visible()
+
+
+def test_exit_intent(page: Page):
+    page.goto("https://the-internet.herokuapp.com/exit_intent")
+
+    modal = page.locator("#ouibounce-modal")
+    expect(modal).to_be_hidden()  # not shown yet
+
+    # Move the mouse inside the page, then fire the "mouse left the page" event
+    page.mouse.move(300, 300)
+    page.locator("html").dispatch_event("mouseleave", {"clientY": -1})
+
+    expect(modal).to_be_visible()
+    expect(modal.locator(".modal-title")).to_contain_text("This is a modal window")
+
+    modal.locator(".modal-footer").click()
+    expect(modal).to_be_hidden()
+
 
