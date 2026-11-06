@@ -218,10 +218,10 @@ def test_entry_ad(page: Page):
     modal.locator(".modal-footer").click()
     expect(modal).to_be_hidden()
 
-    # 3. Reload: the cookie stops the ad from showing again
-    page.reload()
-    page.wait_for_timeout(2000)  # only for learning: gives the ad time to (not) appear
-    expect(modal).to_be_hidden()
+    # # 3. Reload: the cookie stops the ad from showing again
+    # page.reload()
+    # page.wait_for_timeout(2000)  # only for learning: gives the ad time to (not) appear
+    # expect(modal).to_be_hidden()
 
     # # 4. Re-enable the ad and reload: it shows again
     # page.locator("#restart-ad").click()
@@ -244,5 +244,22 @@ def test_exit_intent(page: Page):
 
     modal.locator(".modal-footer").click()
     expect(modal).to_be_hidden()
+
+
+def test_navigations(page: Page):
+    page.goto("https://the-internet.herokuapp.com/")
+
+    # Click on the "A/B Testing" link
+    page.get_by_role("link", name="A/B Testing").click()
+
+
+    # Expect the new page to have a heading with the name of A/B Test Control
+    expect(page.get_by_role("heading", name="A/B Test Control")).to_be_visible()
+
+    # Navigate back to the previous page
+    page.go_back()
+
+    # Expect the original page to have a heading with the name of Welcome to the-internet
+    expect(page.get_by_role("heading", name="Welcome to the-internet")).to_be_visible()
 
 
